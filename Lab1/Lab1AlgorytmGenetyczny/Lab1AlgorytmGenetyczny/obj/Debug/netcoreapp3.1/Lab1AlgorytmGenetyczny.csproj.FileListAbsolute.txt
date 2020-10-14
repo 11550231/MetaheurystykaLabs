@@ -11,3 +11,16 @@ C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\Laboratorium\Lab1\Lab
 C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\Laboratorium\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.dll
 C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\Laboratorium\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.pdb
 C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\Laboratorium\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.genruntimeconfig.cache
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\bin\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.exe
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\bin\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.deps.json
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\bin\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.runtimeconfig.json
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\bin\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.runtimeconfig.dev.json
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\bin\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.dll
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\bin\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.pdb
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.csprojAssemblyReference.cache
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.AssemblyInfoInputs.cache
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.AssemblyInfo.cs
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.csproj.CoreCompileInputs.cache
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.dll
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.pdb
+C:\Users\michalt\Desktop\uczelnia semestr 7\Metaheurystyka\MetaheurystykaLabs\Lab1\Lab1AlgorytmGenetyczny\Lab1AlgorytmGenetyczny\obj\Debug\netcoreapp3.1\Lab1AlgorytmGenetyczny.genruntimeconfig.cache

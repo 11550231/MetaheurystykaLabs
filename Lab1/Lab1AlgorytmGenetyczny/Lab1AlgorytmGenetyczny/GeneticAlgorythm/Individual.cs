@@ -1,11 +1,12 @@
 ﻿using Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace Lab1AlgorytmGenetyczny
 {
-    public class Individual
+    public class Individual : ICloneable
     {
         public GeneticAlgorythm Algorythm { get; }
         public float Fitness { get; set; } = 0;
@@ -39,9 +40,10 @@ namespace Lab1AlgorytmGenetyczny
                     if (Genotype[i]== Genotype[j])
                     {
                         //insert free number into gen
-                        bool canInsert = true;
+                        
                         for (int k = 0; k < Genotype.Length; k++)
                         {
+                            bool canInsert = true;
                             //insert free number into gen
                             for (int l = 0; l < Genotype.Length; l++)
                             {
@@ -67,9 +69,75 @@ namespace Lab1AlgorytmGenetyczny
         
         public Pair<Individual> Cross(Individual secondIndividual)
         {
+            //return CrossDividiangIntoTwoParts(secondIndividual);
+            return CrossCuttingPartFromInsideOfIndiv(secondIndividual);
+        }
+        public Pair<Individual> CrossCuttingPartFromInsideOfIndiv(Individual secondIndividual)
+        {
             var children = new Pair<Individual>();
-            children.First = this;
-            children.Second = secondIndividual;
+            var smallerCutIndex = Algorythm.RandomGenerator.Next(0, Genotype.Length - 2);
+            var biggerCutIndex = Algorythm.RandomGenerator.Next(smallerCutIndex+1, Genotype.Length - 1);
+            var firstChildGenotype = new int[Genotype.Length];
+            var secondChildGenotype = new int[Genotype.Length];
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                if (i < smallerCutIndex || i > biggerCutIndex)
+                {
+                    firstChildGenotype[i] = Genotype[i];
+                    secondChildGenotype[i] = secondIndividual.Genotype[i];
+                }
+                else
+                {
+                    firstChildGenotype[i] = secondIndividual.Genotype[i];
+                    secondChildGenotype[i] = Genotype[i];
+                }
+            }
+            children.First = new Individual(Algorythm, firstChildGenotype);
+            children.Second = new Individual(Algorythm, secondChildGenotype);
+            children.First.Repair();
+            children.Second.Repair();
+            return children;
+        }
+        public Pair<Individual> CrossSwapingGens(Individual secondIndividual)
+        {
+            var children = new Pair<Individual>();
+            var swapedGenPosition = Algorythm.RandomGenerator.Next(0, Genotype.Length - 1);
+            var firstChildGenotype = new int[Genotype.Length];
+            var secondChildGenotype = new int[Genotype.Length];
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                    firstChildGenotype[i] = Genotype[i];
+                    secondChildGenotype[i] = secondIndividual.Genotype[i];
+            }
+            firstChildGenotype[swapedGenPosition] = secondIndividual.Genotype[swapedGenPosition];
+            secondChildGenotype[swapedGenPosition] = Genotype[swapedGenPosition];
+            children.First = new Individual(Algorythm, firstChildGenotype);
+            children.Second = new Individual(Algorythm, secondChildGenotype);
+            children.First.Repair();
+            children.Second.Repair();
+            return children;
+        }
+        public Pair<Individual> CrossDividiangIntoTwoParts(Individual secondIndividual)
+        {
+            var children = new Pair<Individual>();
+            var cutIndex = Algorythm.RandomGenerator.Next(1, Genotype.Length - 2);
+            var firstChildGenotype = new int[Genotype.Length];
+            var secondChildGenotype = new int[Genotype.Length];
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                if (i < cutIndex)
+                {
+                    firstChildGenotype[i] = Genotype[i];
+                    secondChildGenotype[i] = secondIndividual.Genotype[i];
+                }
+                else
+                {
+                    firstChildGenotype[i] = secondIndividual.Genotype[i];
+                    secondChildGenotype[i] = Genotype[i];
+                }
+            }
+            children.First = new Individual(Algorythm, firstChildGenotype);
+            children.Second = new Individual(Algorythm, secondChildGenotype);
             children.First.Repair();
             children.Second.Repair();
             return children;
@@ -82,6 +150,15 @@ namespace Lab1AlgorytmGenetyczny
                 value += gen.ToString()+";";
             }
             return value;
+        }
+
+        public object Clone()
+        {
+            var genotype = new int[Genotype.Length];
+            for (int i = 0; i < Genotype.Length; i++)
+                genotype[i] = Genotype[i];
+            var newObj = new Individual(Algorythm, genotype);
+            return newObj;
         }
     }
 

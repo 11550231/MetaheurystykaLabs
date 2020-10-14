@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\michalt\\Desktop\\uczelnia semestr 7\\Metaheurystyka\\Laboratorium\\Lab1\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny.csproj",
+      "projectUniqueName": "C:\\Users\\michalt\\Desktop\\uczelnia semestr 7\\Metaheurystyka\\MetaheurystykaLabs\\Lab1\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny.csproj",
       "projectName": "Lab1AlgorytmGenetyczny",
-      "projectPath": "C:\\Users\\michalt\\Desktop\\uczelnia semestr 7\\Metaheurystyka\\Laboratorium\\Lab1\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny.csproj",
+      "projectPath": "C:\\Users\\michalt\\Desktop\\uczelnia semestr 7\\Metaheurystyka\\MetaheurystykaLabs\\Lab1\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny.csproj",
       "packagesPath": "C:\\Users\\michalt\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\michalt\\Desktop\\uczelnia semestr 7\\Metaheurystyka\\Laboratorium\\Lab1\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny\\obj\\",
+      "outputPath": "C:\\Users\\michalt\\Desktop\\uczelnia semestr 7\\Metaheurystyka\\MetaheurystykaLabs\\Lab1\\Lab1AlgorytmGenetyczny\\Lab1AlgorytmGenetyczny\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\michalt\\AppData\\Roaming\\NuGet\\NuGet.Config",

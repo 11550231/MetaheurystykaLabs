@@ -11,6 +11,7 @@ namespace Lab1AlgorytmGenetyczny
     {
         public int Dimensions { get; set; }
         public int Capability { get; set; }
+        public float BestPosibleSolution { get; set; } = 0;
         public Market[] Markets;
         public CapacitatedVehicleRoutingProblem()
         {
@@ -45,9 +46,15 @@ namespace Lab1AlgorytmGenetyczny
                 substring = line.Substring(line.IndexOf(" ", 1) + 1, line.IndexOf(" ", indexTextStarts) - indexTextStarts);
                 Markets[marketId].Demand = Int32.Parse(substring);
             }
+            Dimensions--;
+
+
+
+            List<string> allLinesTextSolution = File.ReadAllLines(sourceFilePath.Replace(".vrp",".sol")).ToList();
+            BestPosibleSolution = Int32.Parse(allLinesTextSolution.Last().Substring(5));
         }
 
-        public float CalculateFitness(int[] genotype)
+        public float CalculateSortingFitness(int[] genotype)
         {
             float score = 0;
             for (int i = 0; i < genotype.Length; i++)
@@ -55,15 +62,44 @@ namespace Lab1AlgorytmGenetyczny
                 if (genotype[i] == i)
                     score++;
             }
-            return score;
+            return (score/genotype.Length)*100;
         }
-
+        public float CalculateFitness(int[] genotype)
+        {
+            float score = 0;
+            var warehouse = Markets[0];
+            score += warehouse.GetDistanceBetweenMarkets(Markets[genotype[0] + 1]);
+            float weight = Markets[genotype[0] + 1].Demand;
+            for (int i = 0; i < genotype.Length - 1; i++)
+            {
+                var market1 = Markets[genotype[i]+1];
+                var market2 = Markets[genotype[i + 1]+1];
+               
+                weight += market2.Demand;
+                if (weight>Capability)
+                {
+                    weight = market2.Demand;
+                    score += market1.GetDistanceBetweenMarkets(warehouse);
+                    score += warehouse.GetDistanceBetweenMarkets(market2);
+                }
+                else
+                    score += market1.GetDistanceBetweenMarkets(market2);
+            }
+            score += Markets[genotype[genotype.Length - 1] + 1].GetDistanceBetweenMarkets(warehouse);
+            return (-score) + BestPosibleSolution;
+        }
         public class Market
         {
             public float CoordinateX {get; set;}
             public float CoordinateY { get; set;}
             public float Demand { get; set;}
-            
+            public float GetDistanceBetweenMarkets(Market secondMarker)
+            {
+                var market1 = this;
+                var market2 = secondMarker;
+                var distance = Math.Sqrt(Math.Pow(market1.CoordinateX - market2.CoordinateX, 2) + Math.Pow(market1.CoordinateY - market2.CoordinateY,2));
+                return (float)distance;
+            }
         }
     }
 }

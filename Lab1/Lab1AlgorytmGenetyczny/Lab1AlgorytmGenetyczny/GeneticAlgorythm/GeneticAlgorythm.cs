@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
 {
 
-    public class GeneticAlgorythm
+    public class GeneticAlgorythm: IAlgorythm<Result[]>
     {
         private Result[] AlgorythmResult { get;}
-        public IProblem Problem { get;}
         public Individual[] Generation { get; set; }
         public Random RandomGenerator{ get; set; }
+
+        public IProblem Problem { get; }
+
         public readonly float CROSS_PROBABILITY = 0;
         public readonly float MUTATION_PROBABILITY = 0;
         public readonly int GENERATION_SIZE = 0;
@@ -35,16 +38,16 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
         public Result[] Calculate()
         {
             GenerateFirstRandomGeneration();
+            CalculateGenerationFitness();
             SaveGenetaionFitness(0);
             for (int geneationNumber=1; geneationNumber < AMOUNT_OF_GENERATIONS; geneationNumber++)
             {
-                CalculateGenerationFitness();
                 MutateGeneration();
                 Individual[] newGeneration = CrossGeneration();
-                SaveGenetaionFitness(geneationNumber);
                 newGeneration[0] = AlgorythmResult[geneationNumber-1].BestIndividual;
                 Generation = newGeneration;
-                
+                CalculateGenerationFitness();
+                SaveGenetaionFitness(geneationNumber);
             }
             return AlgorythmResult;
         }
@@ -57,7 +60,7 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
         private Individual[] CrossGeneration()
         {
             Individual[] newGeneration = new Individual[GENERATION_SIZE];
-            for (int i = 0; i < Generation.Length; i = i + 2)
+            for (int i = 0; i < Generation.Length; i += 2)
             {
                 //tournament
                 Individual first = RunTournament();
@@ -72,7 +75,6 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
                 newGeneration[i] = first;
                 newGeneration[i+1] = second;
             }
-
             return newGeneration;
         }
         private Individual RunTournament()
@@ -80,7 +82,7 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
             Individual[] tournamentParticipants = new Individual[TOURNAMENT_SIZE];
             for (int i = 0; i < TOURNAMENT_SIZE; i++)
             {
-                int next = RandomGenerator.Next(0, Problem.Dimensions);
+                int next = RandomGenerator.Next(0, GENERATION_SIZE-1);
                 tournamentParticipants[i] = Generation[next];
             }
             Individual best = tournamentParticipants[0];
@@ -111,12 +113,16 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
                 if (fitness > result.Max)
                 {
                     result.Max = fitness;
-                    result.BestIndividual = crentIndiv;
+                    result.BestIndividual = (Individual)crentIndiv.Clone();
                 }
             }
             result.Average = sum / GENERATION_SIZE;
+            result.Average = -result.Average;
+            result.Max = -result.Max;
+            result.Min = -result.Min;
             AlgorythmResult[generationNumber] = result;
-            Console.WriteLine($"Generation: {generationNumber}; Average: {result.Average}; Max: {result.Max}; Min: {result.Min};");
+            if(generationNumber%1000==0)
+            Console.WriteLine($"Thread: {Thread.CurrentThread.Name} Generation: {generationNumber}; Average: {result.Average}; Max: {result.Max}; Min: {result.Min};");
         }
         private void GenerateFirstRandomGeneration()
         {
