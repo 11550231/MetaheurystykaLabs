@@ -36,15 +36,15 @@ namespace Lab1AlgorytmGenetyczny
             //RunGeneticAlgorytm(0.7f, 0.2f, 1000, 200, 3, "A-n33-k5.vrp");
             var tasks = new List<Task<bool>>();
             //tasks.Add(RunGeneticAlgorytmTask(0.7f, 0.2f, 50000, 100, 5, "A-n54-k7.vrp"));
-            // tasks.Add(RunGeneticAlgorytmTask(0.47f, 0.13f, 50000, 50, 5, "A-n33-k5.vrp"));
+            tasks.Add(RunGeneticAlgorytmTask(0.47f, 0.13f, 50000, 50, 5, "A-n33-k5.vrp"));
             //tasks.Add(RunGeneticAlgorytmTask(0.44f, 0.13f, 50000, 100, 5, "A-n32-k5.vrp"));
             //tasks.Add(RunGeneticAlgorytmTask(0.44f, 0.13f, 50000, 100, 5, "A-n54-k7.vrp"));
             //tasks.Add(RunGeneticAlgorytmTask(0.44f, 0.13f, 50000, 100, 5, "A-n61-k9.vrp"));
             //tasks.Add(RunGeneticAlgorytmTask(0.44f, 0.13f, 50000, 100, 5, "A-n60-k9.vrp"));
             //tasks.Add(RunGeneticAlgorytmTask(0.44f, 0.13f, 50000, 100, 5, "A-n65-k9.vrp"));
             //tasks.Add(RunGeneticAlgorytmTask(0.44f, 0.13f, 50000, 100, 5, "A-n80-k10.vrp"));
-            RunGreedyAlgorytm("A-n54-k7.vrp");
-            RunRandomAlgorytm("A-n54-k7.vrp");
+            //RunGreedyAlgorytm("A-n54-k7.vrp");
+            //RunRandomAlgorytm("A-n54-k7.vrp");
             foreach (var task in tasks)
             {
                 var result = await task;

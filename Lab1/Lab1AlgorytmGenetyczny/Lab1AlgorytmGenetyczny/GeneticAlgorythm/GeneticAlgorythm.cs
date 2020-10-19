@@ -42,10 +42,10 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
             SaveGenetaionFitness(0);
             for (int geneationNumber=1; geneationNumber < AMOUNT_OF_GENERATIONS; geneationNumber++)
             {
-                MutateGeneration();
-                Individual[] newGeneration = CrossGeneration();
-                newGeneration[0] = AlgorythmResult[geneationNumber-1].BestIndividual;
+                Individual[] newGeneration = CrossGeneration(AlgorythmResult[geneationNumber - 1]);
                 Generation = newGeneration;
+                MutateGeneration();
+                Generation[0] = AlgorythmResult[geneationNumber - 1].BestIndividual;
                 CalculateGenerationFitness();
                 SaveGenetaionFitness(geneationNumber);
             }
@@ -57,14 +57,24 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
                 if (RandomGenerator.NextDouble() < MUTATION_PROBABILITY)
                     individual.Mutate();
         }
-        private Individual[] CrossGeneration()
+        private Individual[] CrossGeneration(Result previousGenerationResult)
         {
             Individual[] newGeneration = new Individual[GENERATION_SIZE];
             for (int i = 0; i < Generation.Length; i += 2)
             {
                 //tournament
-                Individual first = RunTournament();
-                Individual second = RunTournament();
+                Individual first = null, second = null;
+                if (USE_ROULETTE)
+                {
+                    first = RunRoulette(previousGenerationResult);
+                    second = RunRoulette(previousGenerationResult);
+                }
+                else
+                {
+                    first = RunTournament();
+                    second = RunTournament();
+                }
+
                 //tournament
                 if (RandomGenerator.NextDouble() < CROSS_PROBABILITY)
                 {
@@ -83,6 +93,20 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
             for (int i = 0; i < TOURNAMENT_SIZE; i++)
             {
                 int next = RandomGenerator.Next(0, GENERATION_SIZE-1);
+                tournamentParticipants[i] = Generation[next];
+            }
+            Individual best = tournamentParticipants[0];
+            foreach (var tourParticipant in tournamentParticipants)
+                if (tourParticipant.Fitness > best.Fitness)
+                    best = tourParticipant;
+            return best;
+        }
+        private Individual RunRoulette(Result previousGenerationResult)
+        {
+            Individual[] tournamentParticipants = new Individual[TOURNAMENT_SIZE];
+            for (int i = 0; i < TOURNAMENT_SIZE; i++)
+            {
+                int next = RandomGenerator.Next(0, GENERATION_SIZE - 1);
                 tournamentParticipants[i] = Generation[next];
             }
             Individual best = tournamentParticipants[0];

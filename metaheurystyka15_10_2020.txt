@@ -1,0 +1,4 @@
+zad 1 - dla 2 trudnych 1 lub 2 uruchomienia
+azure
+amazon aws
+google cloud

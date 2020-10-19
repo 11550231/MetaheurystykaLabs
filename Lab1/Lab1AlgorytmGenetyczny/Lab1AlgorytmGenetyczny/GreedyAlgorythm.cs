@@ -31,10 +31,8 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
             {
                 bool canUse = true;
                 for (int j = 0; j < Answer.Length; j++)
-                {
                     if (Answer[j] == i)
                         canUse = false;
-                }
                 if (canUse)
                 {
                     float score = problem.Markets[currentMarkerIndex+1].GetDistanceBetweenMarkets(problem.Markets[i+1]);
