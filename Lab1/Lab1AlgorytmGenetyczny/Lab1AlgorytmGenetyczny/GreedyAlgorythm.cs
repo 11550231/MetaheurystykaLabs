@@ -7,7 +7,14 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
 {
     public class GreedyAlgorythm : IAlgorythm<GreedyAlgorythm.Result>
     {
+        public GreedyAlgorythm(IProblem problem, int first)
+        {
+            Problem = problem;
+            First = first;
+        }
+
         public IProblem Problem { get; }
+        public int First { get; }
         private int[] Answer { get; set; }
         public Result Calculate()
         {
@@ -15,7 +22,7 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
             Answer = new int[Problem.Dimensions];
             for (int i = 0; i < Problem.Dimensions; i++)
                 Answer[i] = -1;
-            Answer[0] = 0;
+            Answer[0] = First;
             for (int i = 1; i < Problem.Dimensions; i++)
                 Answer[i] = GetNotUsedClosestMarketIndex(Answer[i-1]);
             result.Answer = Answer;
@@ -27,7 +34,7 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
             CapacitatedVehicleRoutingProblem problem = ((CapacitatedVehicleRoutingProblem)Problem);
             int nextMarket = -1;
             float bestScore = int.MaxValue;
-            for (int i = 1; i < Problem.Dimensions; i++)
+            for (int i = 0; i < Problem.Dimensions; i++)
             {
                 bool canUse = true;
                 for (int j = 0; j < Answer.Length; j++)
@@ -45,10 +52,7 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
             }
             return nextMarket;
         }
-        public GreedyAlgorythm(IProblem problem)
-        {
-            Problem = problem;
-        }
+      
 
         public class Result
         {

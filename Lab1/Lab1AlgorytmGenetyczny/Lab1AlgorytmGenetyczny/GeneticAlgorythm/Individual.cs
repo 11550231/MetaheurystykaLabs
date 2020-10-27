@@ -1,6 +1,7 @@
 ﻿using Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
@@ -24,12 +25,40 @@ namespace Lab1AlgorytmGenetyczny
         public int[] Genotype { get; set; }
         public void Mutate()
         {
-                //exchange 2 gens
-                int mutatedGen1Id = Algorythm.RandomGenerator.Next(0, Algorythm.Problem.Dimensions);
-                int mutatedGen2Id = Algorythm.RandomGenerator.Next(0, Algorythm.Problem.Dimensions);
-                int exchange = Genotype[mutatedGen1Id];
-                Genotype[mutatedGen1Id] = Genotype[mutatedGen2Id];
-                Genotype[mutatedGen2Id] = exchange;
+            //var random = Algorythm.RandomGenerator.NextDouble();
+            ////exchange 2 gens
+            //if(random>0.5)
+            //    SwapMutate();
+            //else
+            //    InversionMutate();
+            //if(random > 0.5)
+            //if(Algorythm.MUTATION_BY_SWAP)
+                SwapMutate();
+            //else
+                InversionMutate();
+        }
+        public void InversionMutate()
+        {
+            var children = new Pair<Individual>();
+            var smallerCutIndex = Algorythm.RandomGenerator.Next(0, Genotype.Length - 2);
+            var biggerCutIndex = Algorythm.RandomGenerator.Next(smallerCutIndex + 1, Genotype.Length - 1);
+            
+            for(int i=0;i< (biggerCutIndex- smallerCutIndex+1)/2; i++)
+            {
+                int exchange = Genotype[smallerCutIndex+i];
+                Genotype[smallerCutIndex+i] = Genotype[biggerCutIndex-i];
+                Genotype[biggerCutIndex - i] = exchange;
+            }
+            
+        }
+        public void SwapMutate()
+        {
+            //exchange 2 gens
+            int mutatedGen1Id = Algorythm.RandomGenerator.Next(0, Algorythm.Problem.Dimensions);
+            int mutatedGen2Id = Algorythm.RandomGenerator.Next(0, Algorythm.Problem.Dimensions);
+            int exchange = Genotype[mutatedGen1Id];
+            Genotype[mutatedGen1Id] = Genotype[mutatedGen2Id];
+            Genotype[mutatedGen2Id] = exchange;
         }
         public void Repair()
         {
@@ -69,8 +98,52 @@ namespace Lab1AlgorytmGenetyczny
         
         public Pair<Individual> Cross(Individual secondIndividual)
         {
-            //return CrossDividiangIntoTwoParts(secondIndividual);
-            return CrossCuttingPartFromInsideOfIndiv(secondIndividual);
+            if(!Algorythm.CROSS_OX)
+            return CrossPMX(secondIndividual);
+            else
+                return CrossOX(secondIndividual);
+        }
+        public Pair<Individual> CrossPMX(Individual secondIndividual)
+        {
+            var children = new Pair<Individual>();
+            var smallerCutIndex = Algorythm.RandomGenerator.Next(0, Genotype.Length - 2);
+            var biggerCutIndex = Algorythm.RandomGenerator.Next(smallerCutIndex + 1, Genotype.Length - 1);
+            var firstChildGenotype = new int[Genotype.Length];
+            var secondChildGenotype = new int[Genotype.Length];
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                if (i < smallerCutIndex || i > biggerCutIndex)
+                {
+                    firstChildGenotype[i] = Genotype[i];
+                    secondChildGenotype[i] = secondIndividual.Genotype[i];
+                }
+                else
+                {
+                    firstChildGenotype[i] = secondIndividual.Genotype[i];
+                    secondChildGenotype[i] = Genotype[i];
+                }
+            }
+            //jeśli jest konflikt kopiuję z drugiego rodzica
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                if (i < smallerCutIndex || i > biggerCutIndex)
+                {
+                    if(firstChildGenotype.Count(x=> x == firstChildGenotype[i])>1)
+                    {
+                        firstChildGenotype[i] = secondIndividual.Genotype[i];
+                    }
+                    if (secondChildGenotype.Count(x => x == secondChildGenotype[i]) > 1)
+                    {
+                        secondChildGenotype[i] = Genotype[i];
+                    }
+                }
+            }
+
+            children.First = new Individual(Algorythm, firstChildGenotype);
+            children.Second = new Individual(Algorythm, secondChildGenotype);
+            children.First.Repair();
+            children.Second.Repair();
+            return children;
         }
         public Pair<Individual> CrossCuttingPartFromInsideOfIndiv(Individual secondIndividual)
         {
@@ -115,6 +188,59 @@ namespace Lab1AlgorytmGenetyczny
             children.Second = new Individual(Algorythm, secondChildGenotype);
             children.First.Repair();
             children.Second.Repair();
+            return children;
+        }
+        public Pair<Individual> CrossOX(Individual secondIndividual)
+        {
+            var children = new Pair<Individual>();
+            var smallerCutIndex = Algorythm.RandomGenerator.Next(0, Genotype.Length - 2);
+            var biggerCutIndex = Algorythm.RandomGenerator.Next(smallerCutIndex + 1, Genotype.Length - 1);
+            var firstChildGenotype = new int[Genotype.Length];
+            var secondChildGenotype = new int[Genotype.Length];
+
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                    firstChildGenotype[i] = -1;
+                    secondChildGenotype[i] = -1;
+            }
+
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                if (! (i < smallerCutIndex || i > biggerCutIndex))
+                {
+                    firstChildGenotype[i] = secondIndividual.Genotype[i];
+                    secondChildGenotype[i] = Genotype[i];
+                }
+            }
+            //tworzę listę z niepodmienionych fragmentów genotypu i dla każdego dziecka używam genów które nie występują w nim
+
+
+            List<int> usunedGens = new List<int>();
+            //copy usused gens from first indiv
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                if ((i < smallerCutIndex || i > biggerCutIndex))
+                    usunedGens.Add(Genotype[i]);
+            }
+            //copy usused gens from second indiv
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                if ((i < smallerCutIndex || i > biggerCutIndex))
+                    usunedGens.Add(secondIndividual.Genotype[i]);
+            }
+            List<int> usunedGensInFirstChild = usunedGens.Where(x=> !firstChildGenotype.Contains(x)).GroupBy(y => y).Select(z => z.First()).ToList();
+            List<int> usunedGensInSecondChild = usunedGens.Where(x => !secondChildGenotype.Contains(x)).GroupBy(y => y).Select(z => z.First()).ToList();
+            int lastUsedFromFirstList = 0, lastUsedFromSecondList = 0;
+            for (int i = 0; i < this.Genotype.Length; i++)
+            {
+                if ((i < smallerCutIndex || i > biggerCutIndex))
+                {
+                            firstChildGenotype[i] = usunedGensInFirstChild[lastUsedFromFirstList++];
+                            secondChildGenotype[i] = usunedGensInSecondChild[lastUsedFromSecondList++];
+                }
+            }
+            children.First = new Individual(Algorythm, firstChildGenotype);
+            children.Second = new Individual(Algorythm, secondChildGenotype);
             return children;
         }
         public Pair<Individual> CrossDividiangIntoTwoParts(Individual secondIndividual)

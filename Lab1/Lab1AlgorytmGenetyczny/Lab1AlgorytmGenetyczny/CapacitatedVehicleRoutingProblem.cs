@@ -86,7 +86,7 @@ namespace Lab1AlgorytmGenetyczny
                     score += market1.GetDistanceBetweenMarkets(market2);
             }
             score += Markets[genotype[genotype.Length - 1] + 1].GetDistanceBetweenMarkets(warehouse);
-            return (-score) + BestPosibleSolution;
+            return (-score);
         }
         public class Market
         {

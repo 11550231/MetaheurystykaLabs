@@ -17,14 +17,19 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
         public IProblem Problem { get; }
 
         public readonly float CROSS_PROBABILITY = 0;
+        public readonly bool CROSS_OX = true;
         public readonly float MUTATION_PROBABILITY = 0;
+        public readonly bool MUTATION_BY_SWAP = false;
         public readonly int GENERATION_SIZE = 0;
         public readonly int AMOUNT_OF_GENERATIONS = 0;
         public readonly int TOURNAMENT_SIZE = 0;
         public readonly bool USE_ROULETTE = false;
-        public GeneticAlgorythm(IProblem problem, float crossProbability, float mutationProbability,int amountOfGenerations, int generationSize, int tournamentSize, bool useRoulette=false)
+        public GeneticAlgorythm(IProblem problem, float crossProbability, float mutationProbability,int amountOfGenerations, 
+            int generationSize, int tournamentSize, bool useRoulette, bool mutationBySwap , bool crossOX)
         {
             CROSS_PROBABILITY = crossProbability;
+            MUTATION_BY_SWAP = mutationBySwap;
+            CROSS_OX = crossOX;
             MUTATION_PROBABILITY = mutationProbability;
             GENERATION_SIZE = generationSize;
             TOURNAMENT_SIZE = tournamentSize;
@@ -104,16 +109,36 @@ namespace Lab1AlgorytmGenetyczny.GeneticAlgorythmNamespace
         private Individual RunRoulette(Result previousGenerationResult)
         {
             Individual[] tournamentParticipants = new Individual[TOURNAMENT_SIZE];
+            float minFitness = float.MaxValue;
             for (int i = 0; i < TOURNAMENT_SIZE; i++)
             {
                 int next = RandomGenerator.Next(0, GENERATION_SIZE - 1);
                 tournamentParticipants[i] = Generation[next];
+                if (minFitness > tournamentParticipants[i].Fitness)
+                    minFitness = tournamentParticipants[i].Fitness;
             }
-            Individual best = tournamentParticipants[0];
-            foreach (var tourParticipant in tournamentParticipants)
-                if (tourParticipant.Fitness > best.Fitness)
-                    best = tourParticipant;
-            return best;
+            var list = tournamentParticipants.ToList();
+            list.Sort((x, y) => (int)(x.Fitness - y.Fitness));
+            tournamentParticipants = list.ToArray();
+            float[] maxValueOfThisParticipant = new float[TOURNAMENT_SIZE];
+            for (int i = 0; i < TOURNAMENT_SIZE; i++)
+            {
+                if (i == 0)
+                    maxValueOfThisParticipant[i] = 1000;
+                else
+                    maxValueOfThisParticipant[i] = 1000 / ((i+2) * (i + 2)) + maxValueOfThisParticipant[i - 1];
+
+            }
+            int chosenFitness = RandomGenerator.Next(0,(int) maxValueOfThisParticipant[TOURNAMENT_SIZE-1]);
+            Individual chosen = null;
+            for (int i = 0; i < TOURNAMENT_SIZE; i++)
+            {
+                if (chosenFitness < maxValueOfThisParticipant[i])
+                    chosen = tournamentParticipants[i];
+            }
+            if(chosen==null)
+                chosen = tournamentParticipants[TOURNAMENT_SIZE - 1];
+            return chosen;
         }
         private void CalculateGenerationFitness()
         {
